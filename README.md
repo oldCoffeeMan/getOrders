@@ -1,7 +1,8 @@
 # getOrders
 Multichannel ecommerce order management system built on G Suite
 
---++++++TURKISH / TURKÇE++++++--
+++++++TURKISH / TURKÇE++++++
+
 getOrders G Suite üzerinde geliştirilmiş çok kanallı e-ticaret sipariş yönetim sistemidir.
 
 Temel olarak Google Sheets üzerinde Google Apps Script (JavaScript  tabanlı Google Cloud da çalıan bir scripting dili) kullanılarak farklı e-ticaret sistemleri ve platformları ile entegrasyon sağlar. Google Sheets içinde kullanılabilecek bir add-on şeklinde kullanılmaktadır.
