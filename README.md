@@ -3,11 +3,11 @@ Multichannel ecommerce order management system built on G Suite
 
 ++++++TURKISH / TURKÇE++++++
 
-getOrders G Suite üzerinde geliştirilmiş çok kanallı e-ticaret sipariş yönetim sistemidir.
+getOrders G Suite üzerinde geliştirilmiş çok kanallı bir e-ticaret sipariş yönetim sistemidir.
 
-Temel olarak Google Sheets üzerinde Google Apps Script (JavaScript  tabanlı Google Cloud da çalıan bir scripting dili) kullanılarak farklı e-ticaret sistemleri ve platformları ile entegrasyon sağlar. Google Sheets içinde kullanılabilecek bir add-on şeklinde kullanılmaktadır.
+Google Sheets üzerinde Google Apps Script (JavaScript tabanlı Google Cloud da çalıan bir scripting dili) kullanılarak farklı e-ticaret sistemleri ve platformları ile entegrasyon sağlar. Google Sheets içinde kullanılabilecek bir add-on şeklinde dağıtılmaktadır.
 
-Şu an itibaıyla aşağıdaki işlevleri sağlamaktadır:
+getOrders şu an itibarıyla aşağıdaki işlevleri sağlamaktadır:
 - Woocommerce API'si ile e-ticaret sitenize gelen siparişleri çeker
 - N11 API'si ile N11 mağazanıza gelen siparişleri çeker
 - Hepsiburada API'si ile Hepsiburada mağazanıza gelen siparişleri çeker
@@ -18,4 +18,4 @@ Temel olarak Google Sheets üzerinde Google Apps Script (JavaScript  tabanlı Go
 - Eğer e-fatura kullanıyorsanız Paraşüt üzerinden e-fatura oluşturur ve resmileştirir
 - E-faturaları müşterilere email ile yollar
 
-getOrders gelişmekte olan bir projedir. Yeni özellikler eklendikçe açık kaynaklı sunulacaktır.
+getOrders gelişmekte olan bir projedir. Yeni özellikler eklendikçe açık kaynaklı olarak sunulacaktır.
