@@ -20,6 +20,7 @@ function getHbOrders() {
   
   do {
     
+    // Fetch new orders
     var url = baseUrl + "orders/merchantid/" + merchantId + "?offset=" + page + "&limit=100";
     var options =
 
@@ -108,38 +109,41 @@ function getHbOrders() {
   var range = temp.getDataRange().offset(1, 0, temp.getDataRange().getNumRows() - 1).getValues();
   var newData = [];
   for (var i in range) {
-    var orderNo = range[i][0];
-    var duplicate = false;
-      for (var j in newData) {
-        if(orderNo == newData[j]){   //Compare order ID (column 0)
-          duplicate = true;
+    var orderStatus = range[i][2];
+    if (orderStatus != "Delivered" || orderStatus != "CancelledByCustomer") {
+      var orderNo = range[i][0];
+      var duplicate = false;
+        for (var j in newData) {
+          if(orderNo == newData[j]){   //Compare order ID (column 0)
+            duplicate = true;
+          }
         }
-      }
-    if (!duplicate) {
-      var url = baseUrl + "orders/merchantid/" + merchantId + "/ordernumber/" + orderNo;
-      var options =
-      
-        {
-            "method": "GET",
-            "contentType": "application/json",
-            "headers" : {"Authorization" : "Basic " + encoded},
-            "muteHttpExceptions": true,
+      if (!duplicate) {
+        var url = baseUrl + "orders/merchantid/" + merchantId + "/ordernumber/" + orderNo;
+        var options =
         
-        };
+          {
+              "method": "GET",
+              "contentType": "application/json",
+              "headers" : {"Authorization" : "Basic " + encoded},
+              "muteHttpExceptions": true,
+          
+          };
+          
+        var result = UrlFetchApp.fetch(url, options);
         
-      var result = UrlFetchApp.fetch(url, options);
-      
-      if (result.getResponseCode() == 200) {
-        var params = JSON.parse(result.getContentText());
-        appendOrders(params);
-        totalOrders++;
-      } else {
-          //Logger.log("HepsiBurada order details fetch failed for order no: " + orderNo + ". Response: " + result.getResponseCode());
-          console.error("HepsiBurada order details fetch failed for order no: " + orderNo + ". Response: " + result.getResponseCode());
-          gotErrors++;
+        if (result.getResponseCode() == 200) {
+          var params = JSON.parse(result.getContentText());
+          appendOrders(params);
+          totalOrders++;
+        } else {
+            //Logger.log("HepsiBurada order details fetch failed for order no: " + orderNo + ". Response: " + result.getResponseCode());
+            console.error("HepsiBurada order details fetch failed for order no: " + orderNo + ". Response: " + result.getResponseCode());
+            gotErrors++;
+        }
+        
+        newData.push(orderNo);
       }
-      
-      newData.push(orderNo);
     }
   }
   
