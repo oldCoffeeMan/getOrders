@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      
+      body {
+        background: #e6e6e6;
+        font-family: 'Source Sans Pro', sans-serif;
+      }
+      .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      h1 {
+        font-family: 'Alegreya Sans', sans-serif;
+        font-size: 20px;
+        font-weight: 300;
+        margin-top: 0;
+      }
+      .control-group {
+        display: inline-block;
+        vertical-align: top;
+        background: #fff;
+        text-align: left;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 30px;
+        width: 400px;
+        height: 200px;
+        margin: 10px;
+      }
+      .message-group {
+        display: inline-block;
+        vertical-align: top;
+        background: #fff;
+        text-align: left;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 30px;
+        width: 400px;
+        height: 70px;
+        margin: 10px;
+        }
+.control {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+.control__indicator {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+/*
+  .control:hover input:not([disabled]):checked ~ &,
+  .control input:checked:focus ~ &
+    border-color: #666
+    */
+}
+.control--checkbox .control__indicator {
+  border-radius: 3px;
+}
+.control--radio .control__indicator {
+  border-radius: 50%;
+}
+.control:hover input:not([disabled]) ~ .control__indicator,
+.control input:focus ~ .control__indicator {
+  border-color: #666;
+}
+.control input:checked ~ .control__indicator {
+  background: #fff;
+}
+.control input:disabled ~ .control__indicator {
+  background: #e6e6e6;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.control__indicator:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+.control input:checked ~ .control__indicator:after {
+  display: block;
+}
+.control--checkbox .control__indicator:after {
+  left: 5px;
+  top: 0px;
+  width: 5px;
+  height: 12px;
+  border: solid #34bb92;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.control--checkbox input:disabled ~ .control__indicator:after {
+  border-color: #7b7b7b;
+}
+.control--radio .control__indicator:after {
+  left: 5px;
+  top: 5px;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: #34bb92;
+}
+.control--radio input:disabled ~ .control__indicator:after {
+  background: #7b7b7b;
+}
+
+
+.actions {
+  display: block;
+  height: 48px;
+  padding: 0 16px 16px;
+  text-align: right;
+}
+.actions .button {
+  float: right;
+  margin-left: 8px;
+}
+.button {
+  display: inline-block;
+  position: relative;
+  padding: 0 8px;
+  height: 36px;
+  border: none;
+  margin: 8px 0;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2196f3;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: none;
+  outline: none;
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.button:hover {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2), 0 3px 6px rgba(0,0,0,0.28);
+}
+.button:active {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+.button.blue {
+  background: #2196f3;
+  color: rgba(255,255,255,0.95);
+}
+
+</style>
+    
+    <script>
+    
+    //Success handler function that takes the errors returned from the getAllOrders() function and shows them on the form.
+    function onSuccess(errors){
+    var div=document.getElementById("warning");
+    var startButton=document.getElementById("startbutton")
+    var message="";
+    
+    for(var i = 0 ; i<errors.length;i++){
+      message = message + errors[i]+"<br>";
+    }
+    div.innerHTML=message;
+    startbutton.innerHTML="Yeniden Başlat"
+    
+    }
+    
+    
+    
+    //Function that gets the checked platforms in the form and sends them as a parameter of the getAllOrders() function.
+    function sendChosenPlatforms(){
+      var div=document.getElementById("warning");
+      var inputElements=document.getElementsByTagName("input");
+    
+      var platforms=[];
+      for(var i = 0 ; i<inputElements.length;i++){
+        var currentInput=inputElements[i];
+        if(currentInput.checked){
+          platforms.push(currentInput.id);
+          }
+      }
+      if(platforms.length==0){
+      div.innerHTML="Platform Seçmediniz!";
+      return;
+      } else{
+        div.innerHTML="Siparişler aktarılıyor... Lütfen Bekleyiniz.";
+      }
+ 
+    google.script.run
+    .withSuccessHandler(onSuccess)
+    .getAllOrders(platforms);
+    }
+    
+    </script>
+    
+    </head>
+    <body>
+    <div class="container">
+      <div class="control-group">
+          <h1>Siparişleri aktarmak için platformları seçiniz:</h1>
+          <label class="control control--checkbox">Woocommerce
+            <input type="checkbox" checked="checked" id="Woocommerce"/>
+            <div class="control__indicator"></div>
+          </label>
+          <label class="control control--checkbox">N11
+            <input type="checkbox" checked="checked" id="N11"/>
+            <div class="control__indicator"></div>
+          </label>
+          <label class="control control--checkbox">Trendyol
+            <input type="checkbox" checked="checked" id="Trendyol"/>
+            <div class="control__indicator"></div>
+          </label>
+          <label class="control control--checkbox">Hepsiburada
+            <input type="checkbox" checked="checked" id="Hepsiburada"/>
+            <div class="control__indicator"></div>
+          </label>
+       </div>
+       <div class="message-group" id="warning">Siparişleri aktarmak istediğiniz platformları seçiniz.</div>
+       <div class="actions">
+       <button onclick="sendChosenPlatforms()" id = "startbutton" class="button blue">Başlat</button>
+        <button onclick="google.script.host.close()" id = "closebutton" class="button">Kapat</button>
+      </div>
+    </div>
+  </body>
+</html>
