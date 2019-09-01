@@ -196,43 +196,7 @@ function getOrders() {
 }
 
 
-/**
- * Removes duplicate rows from order details sheet.
- */
-function removeDuplicates(sheet) {
-  //var sheet = SpreadsheetApp.getActiveSheet();
-  var data = sheet.getDataRange().getValues();
-  var newData = [];
-  for (var i in data) {
-    var row = data[i];
-    if (row[27] == "#N/A" || row[32] == "#N/A") {
-      row[37] = "HATA: Ürün Bulunamadı";
-    }
-    var duplicate = false;
-    for (var j in newData) {
-    if(row[0] == newData[j][0] && row[24] == newData[j][24]){   //Compare order ID (column 0) and item no (column 24)
-        duplicate = true;
-        if (row.join() !== newData[j].join() && row[1] > newData[j][1]) {   //If order/item is modified, copy newer values to existing record, keep invoice id
-          if (newData[j][33] != "") {
-            row[33] = newData[j][33];    //Keep invoice id
-            row[34] = newData[j][34];    //Keep e-invoice id
-            row[35] = newData[j][35];    //Keep mail send status
-            row[36] = newData[j][36];    //Keep item sort order
-          }
-          newData[j] = row;   // TO DO: Also consider when an order item is deleted
-        }
-      }
-    }
-    if (!duplicate) {
-      newData.push(row);
-    }
-  }
-  sheet.clearContents();
-  sheet.getRange(1, 1, newData.length, newData[0].length).setValues(newData);
-}
-
-
-function getProductAttributes() {
+function getProductVariations() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var storeUrl = sheet.getRange("B3").getValue();
   var clientKey = sheet.getRange("B4").getValue();
@@ -357,8 +321,32 @@ function getProductAttributes() {
   }
 }
 
+function getCountryStates() {
+  //Get all states of a country
+  //Currently only lists states (which is used as cities) in Turkey
+  
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
+  var storeUrl = sheet.getRange("B3").getValue();
+  var clientKey = sheet.getRange("B4").getValue();
+  var clientSecret = sheet.getRange("B5").getValue();
+  
+  var sUrl = storeUrl + "/wp-json/wc/v3/data/countries/tr?consumer_key=" + clientKey + "&consumer_secret=" + clientSecret;
+  var options =
+        {
+            "method": "GET",
+            "Content-Type": "application/json",
+            "muteHttpExceptions": true,
+        };
 
-function getVariationAttributes() {
+  var result = UrlFetchApp.fetch(sUrl, options);
+  var data = JSON.parse(result.getContentText());
+  var states = data.states;
+  for (var x in states) {
+    sheet.appendRow([states[x].code, states[x].name])
+  }
+}
+
+/*function getVariationAttributes() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var storeUrl = sheet.getRange("B3").getValue();
   var clientKey = sheet.getRange("B4").getValue();
@@ -403,31 +391,4 @@ function getVariationAttributes() {
       doc.appendRow(rowArray);
     }
     Logger.log(rowArray);
-}
-
-
-function getCountryStates() {
-  //Get all states of a country
-  //Currently only lists states (which is used as cities) in Turkey
-  
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
-  var storeUrl = sheet.getRange("B3").getValue();
-  var clientKey = sheet.getRange("B4").getValue();
-  var clientSecret = sheet.getRange("B5").getValue();
-  
-  var sUrl = storeUrl + "/wp-json/wc/v3/data/countries/tr?consumer_key=" + clientKey + "&consumer_secret=" + clientSecret;
-  var options =
-        {
-            "method": "GET",
-            "Content-Type": "application/json",
-            "muteHttpExceptions": true,
-        };
-
-  var result = UrlFetchApp.fetch(sUrl, options);
-  var data = JSON.parse(result.getContentText());
-  var states = data.states;
-  for (var x in states) {
-    sheet.appendRow([states[x].code, states[x].name])
-  }
-  
-}
+}*/
