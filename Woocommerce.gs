@@ -121,16 +121,17 @@ function getOrders() {
       // container.push(params[i]["date_created_gmt"]);
       // container.push(params[i]["order_key"]);
       container.push(params[i]["line_items"][0]["id"]);
-      container.push(params[i]["line_items"][0]["name"]);
+      container.push(params[i]["line_items"][0]["id"]);
       container.push(params[i]["line_items"][0]["sku"]);
-      container.push("=VLOOKUP(VLOOKUP(\"" + params[i]["line_items"][0]["sku"] + "\";WC_ProductList;4;FALSE);Products_Parasut;3;FALSE)");
-      //container.push("=VLOOKUP(\"" + params[i]["line_items"][0]["sku"] + "\";WC_ProductMap;8;FALSE)");
+      container.push(params[i]["line_items"][0]["name"]);
+      container.push("=VLOOKUP(\"" + params[i]["line_items"][0]["sku"] + "\";WC_ProductList;4;FALSE)");
+      container.push("=VLOOKUP(AC" + rNo + ";Products_Parasut;3;FALSE)");
       container.push(params[i]["line_items"][0]["quantity"]);
       container.push(Number(params[i]["line_items"][0]["price"]));
       // container.push(Number(params[i]["line_items"][0]["subtotal"]));
       container.push(Number(params[i]["line_items"][0]["total"]));
       container.push(Number(params[i]["line_items"][0]["total_tax"]));
-      container.push("=VLOOKUP(VLOOKUP(\"" + params[i]["line_items"][0]["sku"] + "\";WC_ProductList;4;FALSE);Products_Parasut;5;FALSE)");
+      container.push("=VLOOKUP(AC" + rNo++ + ";Products_Parasut;5;FALSE)");
       
       temp.appendRow(container);
       container = [];
@@ -154,16 +155,20 @@ function getOrders() {
             container.push("");
           }
           container.push(params[i]["line_items"][k]["id"]);
-          container.push(params[i]["line_items"][k]["name"]);
+          container.push(params[i]["line_items"][k]["id"]);
           container.push(params[i]["line_items"][k]["sku"]);
-          container.push("=VLOOKUP(VLOOKUP(\"" + params[i]["line_items"][k]["sku"] + "\";WC_ProductList;4;FALSE);Products_Parasut;3;FALSE)");
+          container.push(params[i]["line_items"][k]["name"]);
+          container.push("=VLOOKUP(\"" + params[i]["line_items"][k]["sku"] + "\";WC_ProductList;4;FALSE)");
+          container.push("=VLOOKUP(AC" + rNo + ";Products_Parasut;3;FALSE)");
+          //container.push("=VLOOKUP(VLOOKUP(\"" + params[i]["line_items"][k]["sku"] + "\";WC_ProductList;4;FALSE);Products_Parasut;3;FALSE)");
           //container.push("=VLOOKUP(\"" + params[i]["line_items"][k]["sku"] + "\";WC_ProductMap;8;FALSE)");
           container.push(params[i]["line_items"][k]["quantity"]);
           container.push(Number(params[i]["line_items"][k]["price"]));
           //container.push(Number(params[i]["line_items"][k]["subtotal"]));
           container.push(Number(params[i]["line_items"][k]["total"]));
           container.push(Number(params[i]["line_items"][k]["total_tax"]));
-          container.push("=VLOOKUP(VLOOKUP(\"" + params[i]["line_items"][k]["sku"] + "\";WC_ProductList;4;FALSE);Products_Parasut;5;FALSE)");
+          container.push("=VLOOKUP(AC" + rNo++ + ";Products_Parasut;5;FALSE)");
+          //container.push("=VLOOKUP(VLOOKUP(\"" + params[i]["line_items"][k]["sku"] + "\";WC_ProductList;4;FALSE);Products_Parasut;5;FALSE)");
           
           temp.appendRow(container);
           container = [];
@@ -181,7 +186,7 @@ function getOrders() {
     
     var range = temp.getDataRange().offset(1, 0, temp.getDataRange().getNumRows()-1);   // Offset a row to omit header row from range
         
-    range.sort([{column: 1, ascending: false}, 25]);
+    range.sort([{column: 2, ascending: false}, 25]);
         
     console.info("Woocommerce no of orders successfully processed: " + result.getHeaders()["x-wp-total"]);
     
