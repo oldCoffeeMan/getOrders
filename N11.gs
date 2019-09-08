@@ -166,9 +166,12 @@ function getN11Orders() {
           
           var orderItems = orderDetail.getChild("itemList").getChildren("item");
           container.push(orderItems[0].getChild("id").getValue());
-          container.push(orderItems[0].getChild("productName").getValue());
+          container.push(orderItems[0].getChild("id").getValue());
           container.push(orderItems[0].getChild("productSellerCode").getValue());
-          container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[0].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;3;FALSE)");
+          container.push(orderItems[0].getChild("productName").getValue());
+          container.push("=VLOOKUP(\"" + orderItems[0].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE)");
+          container.push("=VLOOKUP(AC" + rNo + ";Products_Parasut;3;FALSE)");
+          //container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[0].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;3;FALSE)");
           container.push(orderItems[0].getChild("quantity").getValue());
           
           var itemPrice = (Number(orderItems[0].getChild("price").getValue()) - Number(orderItems[0].getChild("sellerDiscount").getValue()))/(1 + (8 / 100));       //TO DO: read VAT rate from Product Table
@@ -177,7 +180,8 @@ function getN11Orders() {
           container.push(Number(Math.round(itemPrice+'e2')+'e-2'));
           container.push(Number(Math.round(itemTotal+'e2')+'e-2'));
           container.push(Number(Math.round(taxTotal+'e2')+'e-2'));
-          container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[0].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;5;FALSE)");
+          container.push("=VLOOKUP(AC" + rNo++ + ";Products_Parasut;5;FALSE)");
+          //container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[0].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;5;FALSE)");
           container.push("");            //TO DO: change item sort order column placement
           container.push("");            //TO DO: change item sort order column placement
           container.push("");            //TO DO: change item sort order column placement
@@ -203,9 +207,12 @@ function getN11Orders() {
               }
               
               container.push(orderItems[k].getChild("id").getValue());
-              container.push(orderItems[k].getChild("productName").getValue());
+              container.push(orderItems[k].getChild("id").getValue());
               container.push(orderItems[k].getChild("productSellerCode").getValue());
-              container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[k].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;3;FALSE)");
+              container.push(orderItems[k].getChild("productName").getValue());
+              container.push("=VLOOKUP(\"" + orderItems[k].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE)");
+              container.push("=VLOOKUP(AC" + rNo + ";Products_Parasut;3;FALSE)");
+              //container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[k].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;3;FALSE)");
               container.push(orderItems[k].getChild("quantity").getValue());
               
               var itemPrice = (Number(orderItems[k].getChild("price").getValue()) - Number(orderItems[k].getChild("sellerDiscount").getValue()))/(1 + (8 / 100));       //TO DO: read VAT rate from Product Table
@@ -214,7 +221,8 @@ function getN11Orders() {
               container.push(Number(Math.round(itemPrice+'e2')+'e-2'));
               container.push(Number(Math.round(itemTotal+'e2')+'e-2'));
               container.push(Number(Math.round(taxTotal+'e2')+'e-2'));
-              container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[k].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;5;FALSE)");
+              container.push("=VLOOKUP(AC" + rNo++ + ";Products_Parasut;5;FALSE)");
+              //container.push("=VLOOKUP(VLOOKUP(\"" + orderItems[k].getChild("productSellerCode").getValue() + "\";N11_ProductList;2;FALSE);Products_Parasut;5;FALSE)");
               container.push("");            //TO DO: change item sort order column placement
               container.push("");            //TO DO: change item sort order column placement
               container.push("");            //TO DO: change item sort order column placement
@@ -239,7 +247,7 @@ function getN11Orders() {
   removeDuplicates(temp);
     
   var range = temp.getDataRange().offset(1, 0, temp.getDataRange().getNumRows()-1);   // Offset a row to omit header row from range
-  range.sort([{column: 2, ascending: false}, 1, 37]);
+  range.sort([{column: 2, ascending: false}, 1, 39]);
   
   console.info("N11 - no of orders successfully processed: " + orders.length);
     

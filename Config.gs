@@ -1,6 +1,6 @@
 function getInputsN11(){
   
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var fields=[];
   
   fields.push(confSheet.getRange("N11_APIUser").getValue());
@@ -13,15 +13,21 @@ function getInputsN11(){
 
 function writeInputsN11(inputStrings){
 
-var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
-confSheet.getRange("N11_APIUser").setValue(inputStrings[0]);
-confSheet.getRange("N11_APIPassword").setValue(inputStrings[1]);
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
+  confSheet.getRange("N11_APIUser").setValue(inputStrings[0]);
+  confSheet.getRange("N11_APIPassword").setValue(inputStrings[1]);
   
+  var startDate = new Date();
+  startDate = startDate.getFullYear() + "-" + ("0"+(startDate.getMonth()+1)).slice(-2) + "-" + ("0" + startDate.getDate()).slice(-2);
+  if(confSheet.getRange("N11_StartDate").getValue()==""){
+    confSheet.getRange("N11_StartDate").setValue(startDate);
+  }
+    
   if(confSheet.getRange("N11_APIUser").getValue()==""){
     confSheet.getRange("N11_ConfStatus").setValue("False");
-  }else if(confSheet.getRange("N11_APIPassword").getValue()==""){
+  } else if(confSheet.getRange("N11_APIPassword").getValue()==""){
     confSheet.getRange("N11_ConfStatus").setValue("False");
-  }else{
+  } else{
     confSheet.getRange("N11_ConfStatus").setValue("True");
   }
 
@@ -29,7 +35,7 @@ confSheet.getRange("N11_APIPassword").setValue(inputStrings[1]);
 
 
 function getInputsHb(){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var fields=[];
   
   fields.push(confSheet.getRange("HB_MerchantID").getValue());
@@ -43,7 +49,7 @@ function getInputsHb(){
 
 
 function writeInputsHb(inputStrings){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   confSheet.getRange("HB_MerchantID").setValue(inputStrings[0]);
   confSheet.getRange("HB_APIUser").setValue(inputStrings[1]);
   confSheet.getRange("HB_APIPassword").setValue(inputStrings[2]);
@@ -66,7 +72,7 @@ function writeInputsHb(inputStrings){
 
 
 function getInputsParasut(){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var fields=[];
   
   fields.push(confSheet.getRange("ParasutCompanyId").getValue());
@@ -85,7 +91,7 @@ function getInputsParasut(){
 
 
 function writeInputsParasut(inputStrings){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   confSheet.getRange("ParasutCompanyId").setValue(inputStrings[0]);
   confSheet.getRange("ParasutClientId").setValue(inputStrings[1]);
   confSheet.getRange("ParasutClientSecret").setValue(inputStrings[2]);
@@ -112,7 +118,7 @@ function writeInputsParasut(inputStrings){
 
 
 function getInputsTy(){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var fields=[];
   
   fields.push(confSheet.getRange("TY_SupplierID").getValue());
@@ -127,11 +133,17 @@ function getInputsTy(){
 
 
 function writeInputsTy(inputStrings){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   confSheet.getRange("TY_SupplierID").setValue(inputStrings[0]);
   confSheet.getRange("TY_APIUser").setValue(inputStrings[1]);
   confSheet.getRange("TY_APIPassword").setValue(inputStrings[2]);
-  confSheet.getRange("TY_InvoiceStatus").setValue(inputStrings[3]);  
+  confSheet.getRange("TY_InvoiceStatus").setValue(inputStrings[3]);
+  
+  var startDate = new Date();
+  startDate = startDate.getFullYear() + "-" + ("0"+(startDate.getMonth()+1)).slice(-2) + "-" + ("0" + startDate.getDate()).slice(-2);
+  if(confSheet.getRange("TY_StartDate").getValue()==""){
+    confSheet.getRange("TY_StartDate").setValue(startDate);
+  }
   
   if(confSheet.getRange("TY_SupplierID").getValue()==""){
     confSheet.getRange("TY_ConfStatus").setValue("False");
@@ -150,7 +162,7 @@ function writeInputsTy(inputStrings){
 
 
 function getInputsWC(){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   var fields=[];
   
   fields.push(confSheet.getRange("WC_StoreUrl").getValue());
@@ -164,11 +176,17 @@ function getInputsWC(){
 
 
 function writeInputsWC(inputStrings){
-  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration");
   confSheet.getRange("WC_StoreUrl").setValue(inputStrings[0]);
   confSheet.getRange("WC_CustomerKey").setValue(inputStrings[1]);
   confSheet.getRange("WC_CustomerSecret").setValue(inputStrings[2]);
   confSheet.getRange("WC_InvoiceStatus").setValue(inputStrings[3]);
+  
+  var startDate = new Date();
+  startDate = startDate.getFullYear() + "-" + ("0"+(startDate.getMonth()+1)).slice(-2) + "-" + ("0" + startDate.getDate()).slice(-2);
+  if(confSheet.getRange("WC_StartDate").getValue()==""){
+    confSheet.getRange("WC_StartDate").setValue(startDate);
+  }
   
    if(confSheet.getRange("WC_StoreUrl").getValue()==""){
     confSheet.getRange("WC_ConfStatus").setValue("False");

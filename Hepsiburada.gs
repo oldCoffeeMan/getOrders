@@ -231,9 +231,12 @@ function appendOrders(params) {
       
       //Add item data
       container.push(orders[i].id);
+      container.push(orders[i].sku);
       container.push("=VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;2;FALSE)");            //No merchant sku is supplied in end points. Read sku from HB product table
-      container.push("=VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;4;FALSE)");                         //No product name is supplied in API. Read name from products table
-      container.push("=VLOOKUP(VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;3;FALSE);Products_Parasut;3;FALSE)");                   //Get Parasut id
+      container.push("=VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;4;FALSE)");                    //No product name is supplied in API. Read name from products table
+      container.push("=VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;3;FALSE)");
+      container.push("=VLOOKUP(AC" + rNo + ";Products_Parasut;3;FALSE)");
+      //container.push("=VLOOKUP(VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;3;FALSE);Products_Parasut;3;FALSE)");                   //Get Parasut id
       
       container.push(orders[i].quantity);
       var itemPrice = Number(orders[i].unitPrice.amount)/(1 + Number(orders[i].vatRate / 100));
@@ -242,7 +245,8 @@ function appendOrders(params) {
       container.push(Number(Math.round(itemPrice+'e2')+'e-2'));
       container.push(Number(Math.round(itemTotal+'e2')+'e-2'));
       container.push(Number(Math.round(taxTotal+'e2')+'e-2'));
-      container.push("=VLOOKUP(VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;3;FALSE);Products_Parasut;5;FALSE)");
+      container.push("=VLOOKUP(AC" + rNo++ + ";Products_Parasut;5;FALSE)");
+      //container.push("=VLOOKUP(VLOOKUP(\"" + orders[i].sku + "\";HB_ProductList;3;FALSE);Products_Parasut;5;FALSE)");
       
       temp.appendRow(container);
       temp.getRange(temp.getLastRow(), 1).setNumberFormat('@STRING@');

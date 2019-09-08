@@ -1,6 +1,6 @@
 function createInvoice(platform) {
   
-  //var platform = "Hepsiburada";       //Use for platform tests
+  //var platform = "N11";       //Use for platform tests
   console.time(platform+"Invoices");      //Start timer
   
   var invoiceConf = getInvoiceConfPrst(platform);
@@ -44,7 +44,7 @@ function createInvoice(platform) {
   orderRow = i;
   
   // Check and create invoice for only orders with proper status
-  if (orderData[i][2] == invoiceConf.orderStatus && orderData[i][33] == "") {
+  if (orderData[i][2] == invoiceConf.orderStatus && orderData[i][35] == "") {
     
     var orderId = orderData[i][0];
     var orderDate = orderData[i][23];
@@ -180,14 +180,14 @@ function createInvoice(platform) {
         invoiceItems.push({
             type: 'sales_invoice_details',
             attributes: {
-              quantity: orderData[i][28],
-              unit_price: orderData[i][29],
-              vat_rate: orderData[i][32]
+              quantity: orderData[i][30],
+              unit_price: orderData[i][31],
+              vat_rate: orderData[i][34]
             },
             relationships: {
               product: {
                 data: {
-                  id: orderData[i][27],
+                  id: orderData[i][29],
                   type: 'products'
                 }
               }
@@ -292,12 +292,12 @@ function createInvoice(platform) {
         
         var cell = orderSheet.getRange("A1");
         for (var r = 0; r <= productRow; r++) {
-          cell.offset(orderRow + r, 33).setValue(invoiceId);
+          cell.offset(orderRow + r, 35).setValue(invoiceId);
         }
       
       } else {
         
-        orderSheet.getRange("A1").offset(orderRow, 37).setValue(response.getResponseCode() + response);
+        orderSheet.getRange("A1").offset(orderRow, 39).setValue(response.getResponseCode() + response);
         console.error("Could not create invoice for order no " + prevOrderId + " Response: " + response);
         throw new Error(prevOrderId + " nolu sipariş için Paraşüt faturası düzenlenemedi. Hata: " + response.getResponseCode());
       }
@@ -328,7 +328,7 @@ function createInvoice(platform) {
           data = JSON.parse(json);
     
         } else {
-          orderSheet.getRange("A1").offset(orderRow, 37).setValue(response.getResponseCode() + response);
+          orderSheet.getRange("A1").offset(orderRow, 39).setValue(response.getResponseCode() + response);
           console.error("Could not determine e-invoice eligibility for " + customerId + " Response: " + response);
           throw new Error(customerId + " nolu müşteri için e-fatura düzenlenmesi sağlanamıyor. Hata: " + response.getResponseCode());
         }
@@ -383,7 +383,7 @@ function createInvoice(platform) {
               data = JSON.parse(json);
             
             } else {
-              orderSheet.getRange("A1").offset(orderRow, 37).setValue(response.getResponseCode() + response);
+              orderSheet.getRange("A1").offset(orderRow, 39).setValue(response.getResponseCode() + response);
               console.error("Could not create e-invoice for " + invoiceId + " Response: " + response);
               throw new Error(invoiceId + " nolu fatura için Paraşüt e-fatura düzenlenemedi. Hata: " + response.getResponseCode());
             }
@@ -451,7 +451,7 @@ function createInvoice(platform) {
               data = JSON.parse(json);
             
             } else {
-              orderSheet.getRange("A1").offset(orderRow, 37).setValue(response.getResponseCode() + response);
+              orderSheet.getRange("A1").offset(orderRow, 39).setValue(response.getResponseCode() + response);
               console.error("Could not create e-archive invoice for " + invoiceId + " Response: " + response);
               throw new Error(invoiceId + " nolu fatura için Paraşüt e-arşiv faturası düzenlenemedi. Hata: " + response.getResponseCode());
             }
@@ -468,7 +468,7 @@ function createInvoice(platform) {
       
     } else {
       console.error("Invoice can not be created for order no " + prevOrderId + " due to errors in " + (1 + productRow) + " product line(s).");
-      orderSheet.getRange("A1").offset(orderRow, 37).setValue("Ürün Hatası: Fatura oluşturulamadı!");
+      orderSheet.getRange("A1").offset(orderRow, 39).setValue("Ürün Hatası: Fatura oluşturulamadı!");
     }
   }
   else {
@@ -934,7 +934,7 @@ function showParasutSidebar() {
     var page = template.evaluate();
     SpreadsheetApp.getUi().showModalDialog(page, "Parasut'e baglan.");     //.showSidebar(page);
   } else {
-  Console.log('You already have an access to Parasut');
+  console.log('You already have an access to Parasut');
   }
 }
 
