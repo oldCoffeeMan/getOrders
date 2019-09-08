@@ -46,9 +46,9 @@ function onOpen() {
         //Show Welcome Screen
          var response = ui.alert("getOrders'a Hoşgeldiniz!" +
                           "\n getOrders ile farklı e-ticaret platformlarındaki tüm siparişlerinizi " +
-                          "tek bir yere toplayabilir ve e-faturalarınızı otomatik düzenleyebilirsiniz." + 
+                          "tek bir yere toplayabilir, e-faturalarınızı otomatik düzenleyebilir ve email ile yollayabilirsiniz." + 
                           "\n\n Başlamadan önce platformlara bağlanabilmek için bazı ayarları yapmanız gerekiyor." +
-                          "\n\n Entegrasyon Ayarlarına Menüden Sipariş/Entegrasyon Ayarları/Platform Ayarları seçerek ulaşabilirsiniz.");
+                          "\n\n Entegrasyon Ayarlarına Menüden Siparişler -> Entegrasyon Ayarları -> Platform Ayarları seçerek ulaşabilirsiniz.");
       }
         
 }
@@ -156,19 +156,19 @@ function removeDuplicates(sheet) {
   var newData = [];
   for (var i in data) {
     var row = data[i];
-    if (row[27] == "#N/A" || row[32] == "#N/A") {
-      row[37] = "HATA: Ürün Bulunamadı";
+    if (row[29] == "#N/A" || row[34] == "#N/A") {
+      row[39] = "HATA: Ürün Bulunamadı";
     }
     var duplicate = false;
     for (var j in newData) {
     if(row[0] == newData[j][0] && row[24] == newData[j][24]){   //Compare order ID (column 0) and item no (column 24)
         duplicate = true;
         if (row.join() !== newData[j].join() && row[1] > newData[j][1]) {   //If order/item is modified, copy newer values to existing record, keep invoice id
-          if (newData[j][33] != "") {
-            row[33] = newData[j][33];    //Keep invoice id
-            row[34] = newData[j][34];    //Keep e-invoice id
-            row[35] = newData[j][35];    //Keep mail send status
-            row[36] = newData[j][36];    //Keep item sort order
+          if (newData[j][35] != "") {
+            row[35] = newData[j][35];    //Keep invoice id
+            row[36] = newData[j][36];    //Keep e-invoice id
+            row[37] = newData[j][37];    //Keep mail send status
+            row[38] = newData[j][38];    //Keep item sort order
           }
           newData[j] = row;   // TO DO: Also consider when an order item is deleted
         }
@@ -247,6 +247,60 @@ function validateTaxNo(taxNo){
 }
 
 
+/*
+Gets all orders from the spreadsheet for each platform provided in the platforms parameter.
+Returns an array containing the caught errors and also logs them to the stackdriver.
+*/
+function getAllOrders(platforms){
+  var errors=[];
+  var platform;
+  for(var i = 0 ; i < platforms.length ; i++){
+    platform=platforms[i];
+    try{
+      errors.push(platform + ": Başarılı")
+      if(platform == "Woocommerce"){
+        //qweqwe
+        getOrders();
+      }else if(platform == "N11"){
+        getN11Orders();
+      }else if(platform == "Trendyol"){
+        getTyOrders();
+      }else if(platform == "Hepsiburada"){
+        getHbOrders();
+      }
+     
+    }catch(error){
+      errors[i]=platform + ": Hata->"+error.message;
+      console.error("getAllOrders yielded an error: " + error.message);
+      continue;
+    }
+  }
+  return errors;
+}
+
+
+/*
+Creates all the invoices for each platform provided in the platforms parameter.
+Returns an array containing the caught errors and also logs them to the stackdriver.
+*/
+function createAllInvoices(platforms){
+    
+    var errors=[];
+    var platform;
+    for(var i = 0 ; i < platforms.length ; i++){
+      platform=platforms[i];
+      try{
+        errors.push(platform + ": Başarılı")
+        createInvoice(platforms[i]);
+        
+        }catch(error){
+          errors[i]=platform + ": Hata->"+error.message;
+          console.error("createAllInvoices yielded an error: " + error.message);
+          continue;
+        }
+    }
+    return errors;
+}
 
 
 /* 
@@ -278,31 +332,32 @@ function sendEinvoices(platforms) {
       for (var i = 1; i < orderData.length; i++) {
         
         // Check and send e-invoice by email for only unsent orders
-        if (orderData[i][33] != "" && orderData[i][35] == "") {
+        if (orderData[i][35] != "" && orderData[i][37] == "") {
           
           var customerEmail = orderData[i][16];
           //var customerEmail = ""      //For testing
-          var invoiceNo = orderData[i][33];
+          var invoiceNo = orderData[i][35];
             if (prevInvoiceNo != invoiceNo) {
               try {
                 var eInvoiceNo = sendEmail(invoiceNo, customerEmail);
                 Utilities.sleep(2000);
                 prevInvoiceNo = invoiceNo;
                 var cell = orderSheet.getRange("A1");
-                cell.offset(i, 34).setValue(eInvoiceNo);
-                cell.offset(i, 35).setValue("Gönderildi");
-                cell.offset(i, 37).setValue("");
+                cell.offset(i, 36).setValue(eInvoiceNo);
+                cell.offset(i, 37).setValue("Gönderildi");
+                cell.offset(i, 39).setValue("");
+                console.log("E-invoice no: " + eInvoiceNo + " successfully delivered to " + customerEmail);
               } catch(error) {
                 errorCount++;
                 console.error(error);                     // TO DO: Pass error to UI
                 prevInvoiceNo = invoiceNo;
                 var cell = orderSheet.getRange("A1");
-                cell.offset(i, 37).setValue(error);
+                cell.offset(i, 39).setValue(error);
               }
             } else {
                 var cell = orderSheet.getRange("A1");
-                cell.offset(i, 34).setValue(eInvoiceNo);
-                cell.offset(i, 35).setValue("Gönderildi");
+                cell.offset(i, 36).setValue(eInvoiceNo);
+                cell.offset(i, 37).setValue("Gönderildi");
             }
         }
       }
@@ -315,66 +370,6 @@ function sendEinvoices(platforms) {
   
   }
   return errors;
-}
-
-
-
-/*
-Creates all the invoices for each platform provided in the platforms parameter.
-Returns an array containing the caught errors and also logs them to the stackdriver.
-*/
-function createAllInvoices(platforms){
-    
-    var errors=[];
-    var platform;
-    for(var i = 0 ; i < platforms.length ; i++){
-      platform=platforms[i];
-      try{
-        errors.push(platform + ": Başarılı")
-        createInvoice(platforms[i]);
-        
-        }catch(error){
-          errors[i]=platform + ": Hata->"+error.message;
-          console.error("createAllInvoices yielded an error: " + error.message);
-          continue;
-        }
-    }
-    return errors;
-  
-}
-
-
-/*
-Gets all orders from the spreadsheet for each platform provided in the platforms parameter.
-Returns an array containing the caught errors and also logs them to the stackdriver.
-*/
-function getAllOrders(platforms){
-  var errors=[];
-  var platform;
-  for(var i = 0 ; i < platforms.length ; i++){
-    platform=platforms[i];
-    try{
-      errors.push(platform + ": Başarılı")
-      if(platform == "Woocommerce"){
-        //qweqwe
-        getOrders();
-      }else if(platform == "N11"){
-        getN11Orders();
-      }else if(platform == "Trendyol"){
-        getTyOrders();
-      }else if(platform == "Hepsiburada"){
-        getHbOrders();
-      }
-     
-    }catch(error){
-      errors[i]=platform + ": Hata->"+error.message;
-      console.error("getAllOrders yielded an error: " + error.message);
-      continue;
-    }
-  }
-  return errors;
-  
-  
 }
 
 
