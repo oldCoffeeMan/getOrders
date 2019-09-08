@@ -13,15 +13,21 @@ function getInputsN11(){
 
 function writeInputsN11(inputStrings){
 
-var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
-confSheet.getRange("N11_APIUser").setValue(inputStrings[0]);
-confSheet.getRange("N11_APIPassword").setValue(inputStrings[1]);
+  var confSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Configuration Test");
+  confSheet.getRange("N11_APIUser").setValue(inputStrings[0]);
+  confSheet.getRange("N11_APIPassword").setValue(inputStrings[1]);
   
+  var startDate = new Date();
+  startDate = startDate.getFullYear() + "-" + ("0"+(startDate.getMonth()+1)).slice(-2) + "-" + ("0" + startDate.getDate()).slice(-2);
+  if(confSheet.getRange("N11_StartDate").getValue()==""){
+    confSheet.getRange("N11_StartDate").setValue(startDate);
+  }
+    
   if(confSheet.getRange("N11_APIUser").getValue()==""){
     confSheet.getRange("N11_ConfStatus").setValue("False");
-  }else if(confSheet.getRange("N11_APIPassword").getValue()==""){
+  } else if(confSheet.getRange("N11_APIPassword").getValue()==""){
     confSheet.getRange("N11_ConfStatus").setValue("False");
-  }else{
+  } else{
     confSheet.getRange("N11_ConfStatus").setValue("True");
   }
 
@@ -131,7 +137,13 @@ function writeInputsTy(inputStrings){
   confSheet.getRange("TY_SupplierID").setValue(inputStrings[0]);
   confSheet.getRange("TY_APIUser").setValue(inputStrings[1]);
   confSheet.getRange("TY_APIPassword").setValue(inputStrings[2]);
-  confSheet.getRange("TY_InvoiceStatus").setValue(inputStrings[3]);  
+  confSheet.getRange("TY_InvoiceStatus").setValue(inputStrings[3]);
+  
+  var startDate = new Date();
+  startDate = startDate.getFullYear() + "-" + ("0"+(startDate.getMonth()+1)).slice(-2) + "-" + ("0" + startDate.getDate()).slice(-2);
+  if(confSheet.getRange("TY_StartDate").getValue()==""){
+    confSheet.getRange("TY_StartDate").setValue(startDate);
+  }
   
   if(confSheet.getRange("TY_SupplierID").getValue()==""){
     confSheet.getRange("TY_ConfStatus").setValue("False");
@@ -169,6 +181,12 @@ function writeInputsWC(inputStrings){
   confSheet.getRange("WC_CustomerKey").setValue(inputStrings[1]);
   confSheet.getRange("WC_CustomerSecret").setValue(inputStrings[2]);
   confSheet.getRange("WC_InvoiceStatus").setValue(inputStrings[3]);
+  
+  var startDate = new Date();
+  startDate = startDate.getFullYear() + "-" + ("0"+(startDate.getMonth()+1)).slice(-2) + "-" + ("0" + startDate.getDate()).slice(-2);
+  if(confSheet.getRange("WC_StartDate").getValue()==""){
+    confSheet.getRange("WC_StartDate").setValue(startDate);
+  }
   
    if(confSheet.getRange("WC_StoreUrl").getValue()==""){
     confSheet.getRange("WC_ConfStatus").setValue("False");
