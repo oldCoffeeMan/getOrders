@@ -19,3 +19,15 @@ getOrders şu an itibarıyla aşağıdaki işlevleri sağlamaktadır:
 - E-faturaları müşterilere email ile yollar
 
 getOrders gelişmekte olan bir projedir. Yeni özellikler eklendikçe açık kaynaklı olarak sunulacaktır.
+
+getOrders'ı kullanmaya başlamak için aşağıdaki linkten getOrders örnek Google sheet (hesap tablosu) dosyasını açın.
+
+https://docs.google.com/spreadsheets/d/1VD0wEmdRKL4CKddt93Q6tAb3Od5Wm4_YKGrwqXMz-Fo/edit?usp=sharing
+
+Dosyayı açtıktan sonra üst menüden Dosya altındaki "Kopyasını oluştur" seçeneği ile getOrders dosyasının size özel ve kendi Google hesabınıza bağlı bir kopyasını oluşturun.
+
+getOrders kullanım klavuzu için: https://docs.google.com/document/d/14Yo_lrm1hjemmuPFGy9zn6s-jeykuUOFxTTVJQdAqQQ/edit?usp=sharing
+
+getOrders entegrasyon klavuzu için: https://docs.google.com/document/d/1tgvxRWM6s2UEyaiIqgDFiXNRzdYJyC12r3zyxxScboA/edit?usp=sharing
+
+Kullanım sırasında çıkan sorunlar için https://getOrders.io adresindeki formu kullanabilir veya issue açabilirsiniz.
